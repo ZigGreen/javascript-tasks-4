@@ -45,7 +45,6 @@ export default function * FriendsIterator(collection, rootID, deep = 3) {
                         );
                         friends.forEach( friend => gray.add(friend));
                         levels[level + 1].push(...friends);
-                        //console.log(`added ${friends}  ||  ${JSON.stringify(marked)}`)
                     }
 
                     result = {
