@@ -5,10 +5,12 @@ export default function * FriendsIterator(collection, rootID, deep = 3) {
 
     const backStepSize = 2;
     const marked = new Set([rootID]);
+    const gray = new Set([rootID]);
     const levels = new Array(deep).fill(null).map(()=>[]);
     const root = collection[rootID] || null;
     const rootChildren = root ? [...root.friends] : [];
     levels[0] = rootChildren.sort();
+    rootChildren.forEach( friend => gray.add(friend));
 
     let direction = GO_FORWARD;
     let result = {name: rootID, ...root};
@@ -39,9 +41,11 @@ export default function * FriendsIterator(collection, rootID, deep = 3) {
 
                     if (!marked.has(nextId) && (level < deep - 1)) {
                         const friends = collection[nextId].friends.filter(
-                            id => !marked.has(id)
+                            id => !gray.has(id)
                         );
+                        friends.forEach( friend => gray.add(friend));
                         levels[level + 1].push(...friends);
+                        //console.log(`added ${friends}  ||  ${JSON.stringify(marked)}`)
                     }
 
                     result = {
